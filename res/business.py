@@ -103,6 +103,37 @@ def get_workmail_inventory(oId, profile, boto3_config, selected_regions):
 
 
 
+
+def get_workspaces_inventory(oId, profile, boto3_config, selected_regions):
+
+    '''
+        Returns workspaces inventory
+
+        :param oId: ownerId (AWS account)
+        :type oId: string
+        :param profile: configuration profile name used for session
+        :type profile: string
+
+        :return: workspaces inventory
+        :rtype: json
+
+        ..note:: http://boto3.readthedocs.io/en/latest/reference/services/workspaces.html
+    ''' 
+
+    return glob.get_inventory(
+        ownerId = oId,
+        profile = profile,
+        boto3_config = boto3_config,
+        selected_regions = selected_regions,
+        aws_service = "workspaces", 
+        aws_region = "all", 
+        function_name = "describe_workspaces" ,
+        key_get = "Workspaces",
+        pagination = True  
+    )    
+
+
+
 ''' Hey, doc: we're in a module! '''
 
 if (__name__ == '__main__'):

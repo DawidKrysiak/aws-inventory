@@ -248,6 +248,32 @@ def get_kinesis_streams_inventory(oId, profile, boto3_config, selected_regions):
     )
 
 
+def get_kafka_inventory(oId, profile, boto3_config, selected_regions):
+
+    '''
+        Returns Athena databases details
+        :param oId: ownerId (AWS account)
+        :type oId: string
+        :param profile: configuration profile name used for session
+        :type profile: string
+        :return: Athena inventory
+        :rtype: json
+        ..note:: https://docs.aws.amazon.com/cli/latest/reference/athena/
+    '''
+
+    return glob.get_inventory(
+        ownerId = oId,
+        profile = profile,
+        boto3_config = boto3_config,
+        selected_regions = selected_regions,
+        aws_service = "kafka",
+        aws_region = "all",
+        function_name = "list_clusters_v2",
+        key_get = "ClusterInfoList",
+    )
+
+
+
 ''' Hey, doc: we're in a module! '''
 
 if (__name__ == "__main__"):

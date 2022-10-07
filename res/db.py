@@ -106,9 +106,7 @@ def get_neptune_inventory(oId, profile, boto3_config, selected_regions):
 
     '''
 
-    neptune_inventory = {}
-
-    neptune_inventory['clusters'] = glob.get_inventory(
+    return glob.get_inventory(
         ownerId = oId,
         profile = profile,
         boto3_config = boto3_config,
@@ -118,8 +116,6 @@ def get_neptune_inventory(oId, profile, boto3_config, selected_regions):
         function_name = "describe_db_clusters", 
         key_get = "DBClusters"
     )
-
-    return neptune_inventory
 
 def get_elasticache_inventory(oId, profile, boto3_config, selected_regions):
 

@@ -36,7 +36,7 @@ formatter       = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
 
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
-logger.setLevel(logging.WARNING)
+logger.setLevel(logging.DEBUG)
 
 
 ''' If needed: S3 bucket name to write inventory '''
@@ -55,7 +55,7 @@ SUPPORTED_INVENTORIES = {
 	"lambda": 1,
 	"lightsail": 4,
 	"efs": 1,
-	"s3": 1,
+	#"s3": 1,
 	"glacier": 1,
 	"rds": 2,
 	"dynamodb": 1,
@@ -112,6 +112,8 @@ SUPPORTED_INVENTORIES = {
 	"alexa": 1,
 	"workmail": 1,
 	"neptune": 1,
+    "kafka": 1,
+    "workspaces":1,
 }
 SUPPORTED_COMMANDS = list(SUPPORTED_INVENTORIES.keys())
 SUPPORTED_PARAMETERS = ["debug", "info", "warning", "error"]

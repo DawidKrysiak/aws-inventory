@@ -5,7 +5,7 @@ import botocore
 import collections
 import csv
 import json
-import yaml
+
 import smtplib
 import os, hmac, hashlib, sys
 import pprint
@@ -15,8 +15,6 @@ import time
 
 import res.utils as utils
 import config
-
-from tomark import Tomark
 
 import res.glob            as glob
 
@@ -255,9 +253,6 @@ if ('emr' in arguments):
 if ('kinesis' in arguments):
     thread_list.append(awsthread.AWSThread('kinesis-streams', analytics.get_kinesis_streams_inventory, ownerId, profile_name, boto3_config, selected_regions))
 
-if ('kafka' in arguments):
-    thread_list.append(awsthread.AWSThread('kafka',analytics.get_kafka_inventory, ownerId, profile_name, boto3_config, selected_regions))
-
 if ('cloudformation' in arguments):
     thread_list.append(awsthread.AWSThread('cloudformation', mgn.get_cloudformation_inventory, ownerId, profile_name, boto3_config, selected_regions))
 
@@ -287,8 +282,6 @@ if ('alexa' in arguments):
 if ('workdocs' in arguments):
     thread_list.append(awsthread.AWSThread('workdocs', bus.get_workdocs_inventory, ownerId, profile_name, boto3_config, selected_regions))
 
-if ('workspaces' in arguments):
-    thread_list.append(awsthread.AWSThread('workspaces', bus.get_workspaces_inventory, ownerId, profile_name, boto3_config, selected_regions))
 
 ''' Workmail (not well tested, some rights issues) '''
 
@@ -391,9 +384,15 @@ try:
 except IOError as e:
     config.logger.error("I/O error({0}): {1}".format(e.errno, e.strerror))
 
-json_file.write(yaml.safe_dump(inventory, allow_unicode=True, default_flow_style=False))
+def fn(items, level=0):
+    for item in inventory:
+        if isinstance(item, inventory):
+            fn(item, level + 1)
+        else:
+            indentation = '\t' * level
+            print('%s%s' % (indentation, item))
 
-#json_file.write(json.dumps(inventory))
+json_file.write(json.JSONEncoder().encode(inventory))
 json_file.close()
 
 
