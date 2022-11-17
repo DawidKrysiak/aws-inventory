@@ -25,8 +25,11 @@ def get_aws_regions(profile_name):
     session = boto3.Session(profile_name=profile_name, region_name="us-east-1")
     client = session.client("ec2")
 
-    regions = client.describe_regions(AllRegions=True)
-    region_list = regions["Regions"]
+    try:
+        regions = client.describe_regions(AllRegions=True)
+        region_list = regions["Regions"]
+    except:
+        pass
 
     ''' We assign one color to each region '''
 
@@ -36,10 +39,13 @@ def get_aws_regions(profile_name):
         ''' Looking for AZ? Why not? But only if you have the rights to... '''
         current_region = region['RegionName']
         if (region['OptInStatus'] != 'not-opted-in'):
-            session = boto3.Session(profile_name=profile_name)
-            client = session.client("ec2", region_name=current_region)
-            current_zones = client.describe_availability_zones()
-            region['zones'] = current_zones['AvailabilityZones']
+            try:
+                session = boto3.Session(profile_name=profile_name)
+                client = session.client("ec2", region_name=current_region)
+                current_zones = client.describe_availability_zones()
+                region['zones'] = current_zones['AvailabilityZones']
+            except:
+                pass
 
 
     config.logger.info(regions)
